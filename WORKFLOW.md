@@ -45,6 +45,17 @@ uv run python -m compileall .
 
 The test suite is the required local verification path. This repository intentionally has no GitHub Actions workflow.
 
+## Render deployment
+
+The repository includes a `render.yaml` Blueprint and an `app.py` FastAPI wrapper. After pushing the repository to GitHub:
+
+1. Create a Render Blueprint from the repository.
+2. Set `GOOGLE_API_KEY` as a secret environment variable.
+3. Deploy and verify `/health`.
+4. Send a request to `/chat` with a JSON body containing a non-empty `message`.
+
+Render runs `uv sync --dev` during build and starts `uvicorn` on the port supplied by Render. The current runtime is intentionally in memory, so use this deployment for demonstrations only until persistent session, memory, artifact, and authentication services are designed.
+
 ## Adding a tool
 
 1. Put deterministic logic in `tools/`.

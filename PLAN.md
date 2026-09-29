@@ -41,6 +41,8 @@ This plan separates verified implementation from future work. It is intentionall
 ### Documentation
 
 - Setup and usage guide
+- FastAPI HTTP wrapper with `/health` and `/chat` endpoints
+- Render Blueprint for a demo web service
 - System design reference
 - Development workflow
 - Contribution guide

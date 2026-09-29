@@ -6,6 +6,26 @@ Travel Concierge is a local Google Agent Development Kit (ADK) learning project.
 
 The current implementation is intentionally local and demo-safe. It does not make real reservations, process payments, or provide production-grade multi-user storage.
 
+## HTTP deployment boundary
+
+`app.py` is a thin FastAPI boundary around `TravelConciergeRuntime`:
+
+```text
+HTTP client
+  |
+  +--> GET /health
+  |
+  +--> POST /chat
+          |
+          v
+  TravelConciergeRuntime
+          |
+          v
+      root_agent
+```
+
+The API creates a session ID when one is not supplied and returns the final response plus observed tool-call names. It does not expose raw ADK events or credentials. The Render configuration in `render.yaml` uses Uvicorn and Render's `$PORT`.
+
 ## Runtime shape
 
 ```text
@@ -93,7 +113,7 @@ Failures should be returned as structured tool errors. Agents must not claim tha
 - Services are in memory and do not survive process restarts.
 - Booking confirmation is demo-only.
 - Translation output is natural-language text rather than an enforced schema in the local Developer API configuration.
-- There is no web frontend or HTTP API.
 - Authentication, authorization, rate limiting, and persistent tenancy are not implemented.
+- There is no web frontend; `app.py` provides only a minimal HTTP API for deployment demos.
 
 These limitations are tracked in [PLAN.md](PLAN.md).

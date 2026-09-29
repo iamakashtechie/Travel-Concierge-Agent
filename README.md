@@ -86,6 +86,29 @@ uv run adk --help
 
 The project intentionally has no GitHub Actions workflow. Local tests are the verification path for now.
 
+## Deploy to Render
+
+The repository includes [render.yaml](render.yaml) for a small Render Web Service.
+
+1. Push the repository to GitHub.
+2. In Render, choose **New > Blueprint** and select the repository.
+3. When prompted, provide `GOOGLE_API_KEY` as a secret environment variable.
+4. Deploy the blueprint.
+5. Check `https://<your-service>.onrender.com/health`.
+
+The service starts with:
+
+```text
+uv run uvicorn app:app --host 0.0.0.0 --port $PORT
+```
+
+The API provides:
+
+- `GET /health`: deployment health check.
+- `POST /chat`: accepts `{ "message": "...", "session_id": "optional-id" }` and returns the response, session ID, and observed tool calls.
+
+This deployment uses in-memory sessions, memory, and artifacts. They can disappear when the service restarts or sleeps, so this is suitable for a demo rather than production persistence. Render supplies `PORT`; do not hard-code it.
+
 ## Project structure
 
 ```text
