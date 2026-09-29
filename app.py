@@ -1,8 +1,22 @@
+import sys
+import types
+from pathlib import Path
 from uuid import uuid4
 
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from google.genai.types import Content, Part
+
+
+# Render imports this file as top-level ``app`` from the repository root.
+# The project keeps its package files at that root, so expose that directory
+# as the ``travel_concierge`` package before importing the application modules.
+if "travel_concierge" not in sys.modules:
+  project_root = Path(__file__).resolve().parent
+  package = types.ModuleType("travel_concierge")
+  package.__file__ = str(project_root / "__init__.py")
+  package.__path__ = [str(project_root)]
+  sys.modules["travel_concierge"] = package
 
 from travel_concierge.evaluation.trace import extract_tool_calls
 from travel_concierge.runtime import TravelConciergeRuntime
